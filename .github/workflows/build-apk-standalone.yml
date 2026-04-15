@@ -15,12 +15,6 @@ jobs:
     permissions:
       contents: read
 
-    env:
-      PHONEHELPER_KEYSTORE: ${{ github.workspace }}/.ci/phonehelper.jks
-      PHONEHELPER_KEYSTORE_PASSWORD: android
-      PHONEHELPER_KEY_ALIAS: phonehelper
-      PHONEHELPER_KEY_PASSWORD: android
-
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -41,19 +35,6 @@ jobs:
         with:
           gradle-version: '8.7'
           cache-disabled: true
-
-      - name: Generate signing keystore
-        run: |
-          mkdir -p "$(dirname "$PHONEHELPER_KEYSTORE")"
-          keytool -genkeypair -v \
-            -keystore "$PHONEHELPER_KEYSTORE" \
-            -storepass "$PHONEHELPER_KEYSTORE_PASSWORD" \
-            -keypass "$PHONEHELPER_KEY_PASSWORD" \
-            -alias "$PHONEHELPER_KEY_ALIAS" \
-            -keyalg RSA \
-            -keysize 2048 \
-            -validity 3650 \
-            -dname "CN=PhoneHelper Training, OU=Training, O=Training Demo, L=Online, S=Online, C=CN"
 
       - name: Build signed release APK
         run: gradle assembleRelease --stacktrace
