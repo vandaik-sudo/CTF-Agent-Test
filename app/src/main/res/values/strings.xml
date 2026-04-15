@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">手机助手 Pro</string>
+    <string name="last_scan_format">最近体检 %1$s · %2$s</string>
+    <string name="upload_status_success">云端同步成功 · HTTP %1$d · %2$d B</string>
+    <string name="upload_status_failure">云端同步失败 · %1$s</string>
+    <string name="local_path_format">本地报告：%1$s</string>
+    <string name="storage_status_format">待清理缓存 %1$d MB · 预计释放内存 %2$d MB</string>
+    <string name="network_status_format">同步目标：%1$s · 状态码 %2$d</string>
+    <string name="progress_idle">当前无后台任务</string>
+</resources>
