@@ -27,6 +27,10 @@
 
 - APK/app/build/outputs/apk/release/
 
+当前 GitHub Actions 会在构建时生成临时签名证书，因此产出的 release APK 可以直接安装用于课堂演示。
+
+如果你从 GitHub Actions 下载 artifact，需要先解压，再安装其中的 app-release.apk。
+
 ## 本地说明
 
 当前工程没有附带 Gradle Wrapper，目的是让你优先走 GitHub Actions 构建，不依赖本地 Android Studio。

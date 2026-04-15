@@ -1,3 +1,6 @@
+def releaseKeystorePath = System.getenv('PHONEHELPER_KEYSTORE')
+def hasReleaseSigning = releaseKeystorePath != null && !releaseKeystorePath.trim().isEmpty()
+
 plugins {
     id 'com.android.application'
 }
@@ -5,6 +8,19 @@ plugins {
 android {
     namespace 'com.demo.phonehelper'
     compileSdk 34
+
+    signingConfigs {
+        release {
+            if (hasReleaseSigning) {
+                storeFile file(releaseKeystorePath)
+                storePassword System.getenv('PHONEHELPER_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('PHONEHELPER_KEY_ALIAS')
+                keyPassword System.getenv('PHONEHELPER_KEY_PASSWORD')
+                enableV1Signing true
+                enableV2Signing true
+            }
+        }
+    }
 
     defaultConfig {
         applicationId 'com.demo.phonehelper'
@@ -24,6 +40,7 @@ android {
             versionNameSuffix '-debug'
         }
         release {
+            signingConfig hasReleaseSigning ? signingConfigs.release : signingConfigs.debug
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

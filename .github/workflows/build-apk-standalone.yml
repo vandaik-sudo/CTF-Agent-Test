@@ -6,38 +6,61 @@ on:
     paths:
       - '**'
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    env:
+      PHONEHELPER_KEYSTORE: ${{ github.workspace }}/.ci/phonehelper.jks
+      PHONEHELPER_KEYSTORE_PASSWORD: android
+      PHONEHELPER_KEY_ALIAS: phonehelper
+      PHONEHELPER_KEY_PASSWORD: android
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
 
       - name: Set up Gradle 8.7
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: '8.7'
+          cache-disabled: true
 
-      - name: Install Android packages
+      - name: Generate signing keystore
         run: |
-          yes | sdkmanager --licenses > /dev/null
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          mkdir -p "$(dirname "$PHONEHELPER_KEYSTORE")"
+          keytool -genkeypair -v \
+            -keystore "$PHONEHELPER_KEYSTORE" \
+            -storepass "$PHONEHELPER_KEYSTORE_PASSWORD" \
+            -keypass "$PHONEHELPER_KEY_PASSWORD" \
+            -alias "$PHONEHELPER_KEY_ALIAS" \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 3650 \
+            -dname "CN=PhoneHelper Training, OU=Training, O=Training Demo, L=Online, S=Online, C=CN"
 
-      - name: Build release APK
+      - name: Build signed release APK
         run: gradle assembleRelease --stacktrace
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: phonehelper-release-apk
-          path: app/build/outputs/apk/release/*.apk
+          name: phonehelper-release-signed-apk
+          path: app/build/outputs/apk/release/*release.apk
+          if-no-files-found: error
