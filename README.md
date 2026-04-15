@@ -25,11 +25,11 @@
 
 构建产物位置：
 
-- APK/app/build/outputs/apk/release/
+- APK/app/build/outputs/apk/debug/
 
-当前 GitHub Actions 直接产出可安装的 release APK，可直接用于课堂演示。
+当前 GitHub Actions 默认产出可直接安装的 debug APK，用于课堂演示最稳妥。
 
-如果你从 GitHub Actions 下载 artifact，需要先解压，再安装其中的 app-release.apk。
+如果你从 GitHub Actions 下载 artifact，需要先解压，再安装其中的 app-debug.apk。
 
 ## 本地说明
 
