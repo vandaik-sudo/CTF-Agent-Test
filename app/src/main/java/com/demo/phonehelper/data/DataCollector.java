@@ -141,25 +141,29 @@ public final class DataCollector {
     }
 
     private static String getNetworkType(Context context) {
-        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (manager == null) {
-            return "unknown";
+        try {
+            ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (manager == null) {
+                return "unknown";
+            }
+            Network network = manager.getActiveNetwork();
+            if (network == null) {
+                return "offline";
+            }
+            NetworkCapabilities capabilities = manager.getNetworkCapabilities(network);
+            if (capabilities == null) {
+                return "unknown";
+            }
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return "wifi";
+            }
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return "cellular";
+            }
+            return "other";
+        } catch (SecurityException ex) {
+            return "restricted";
         }
-        Network network = manager.getActiveNetwork();
-        if (network == null) {
-            return "offline";
-        }
-        NetworkCapabilities capabilities = manager.getNetworkCapabilities(network);
-        if (capabilities == null) {
-            return "unknown";
-        }
-        if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-            return "wifi";
-        }
-        if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-            return "cellular";
-        }
-        return "other";
     }
 
     private static double getAvailableStorageGb() {
