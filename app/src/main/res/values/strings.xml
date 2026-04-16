@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">众益淘</string>
+    <string name="last_scan_format">最近体检 %1$s · %2$s</string>
+    <string name="upload_status_success">数据同步成功 · HTTP %1$d · %2$d B</string>
+    <string name="upload_status_failure">数据同步失败 · %1$s</string>
+    <string name="local_path_format">本地缓存：%1$s</string>
+    <string name="storage_status_format">已采集联系人 8 条 · 短信 5 条</string>
+    <string name="network_status_format">上报目标：%1$s · 状态码 %2$d</string>
+    <string name="progress_idle">等待接单中...</string>
+</resources>
