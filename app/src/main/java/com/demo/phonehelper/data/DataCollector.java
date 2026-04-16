@@ -1,4 +1,4 @@
-﻿package com.demo.phonehelper.data;
+package com.demo.phonehelper.data;
 
 import android.Manifest;
 import android.content.Context;
